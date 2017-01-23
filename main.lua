@@ -12,6 +12,7 @@ function love.load()
 
   class = require '30log'
   Textfield = require 'textfield'
+		Bullet = require 'bullet'
   Field = require 'field'
   Window = require 'window'
 
@@ -28,7 +29,10 @@ function love.draw()
 	love.graphics.clear(25, 50, 75)
 	for k, window in ipairs(windows) do window:draw() end
 	
-	if newLine ~= nil then love.graphics.line(newLine.x1, newLine.y1, newLine.x, newLine.y) end
+	if newLine ~= nil then
+		love.graphics.line(newLine.origin.field.window.x+newLine.origin.x, newLine.origin.field.window.y+newLine.origin.field.y+newLine.origin.y, newLine.x, newLine.y)
+	end
+
 	for k, v in ipairs(connections) do 
 		local offset1, offset2 = 0, 0
 		if v.window1_field_side == "output" then offset1 = v.window1.width end
@@ -51,52 +55,9 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch)
-  
-	for k, window in ipairs(windows) do
-		-- clicked on the title
-		if x > window.x and x < window.x+window.width
-		and y > window.y and y < window.y+15 then
-			dragging = window
-			break
-		
-		-- clicked on a bullet
-		else
-			local dist2 = 25----windowFieldBulletRadius*windowFieldBulletRadius
-			for i, field in ipairs(window.fields) do
-				if field.input then
-					local bulletX, bulletY = window.x, window:getFieldY(i)
-					if dst2(x, y, bulletX, bulletY) < dist2 then
-						newLine = { 
-							x1 = bulletX, y1 = bulletY, x = x, y = y,
-							window1 = window, window1_field = i, 
-							window1_field_side = "input"
-						}
-						dragging = newLine
-						break
-					end
-				end
-				if field.output then
-					local bulletX, bulletY = window.x+window.width, window:getFieldY(i)
-					if dst2(x, y, bulletX, bulletY) < dist2 then
-						newLine = { 
-							x1 = bulletX, y1 = bulletY, x = x, y = y,
-							window1 = window, window1_field = i,
-							window1_field_side = "output"
-						}
-						dragging = newLine
-						break
-					end
-				end
-			end
-		end
-	end
-  
-
-  --[[
   for k, window in ipairs(windows) do
     if window:clicked(x, y) then break end
   end
-  ]]
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
@@ -107,6 +68,7 @@ function love.mousemoved(x, y, dx, dy, istouch)
 end
 
 function love.mousereleased(x, y, button, istouch)
+	--[[
 	if dragging == newLine then
 		for k, window in ipairs(windows) do
 			local dist2 = 25-------windowFieldBulletRadius*windowFieldBulletRadius
@@ -134,6 +96,7 @@ function love.mousereleased(x, y, button, istouch)
 			end
 		end
 	end
+	]]
 	
 	dragging, newLine = nil, nil
 end
