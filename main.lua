@@ -1,4 +1,4 @@
-local function dst2(x1, y1, x2, y2)
+function dst2(x1, y1, x2, y2)
 	local x, y = x2-x1, y2-y1
 	return x*x + y*y
 end
@@ -15,23 +15,13 @@ function love.load()
   Field = require 'field'
   Window = require 'window'
 
-  --[[
-  local win1 = Window(200, 100)
-  local win2 = Window(200, 300)
-
-  table.insert(win1.fields, { name = "Field 1", value = nil, input = true, output = true })
-  table.insert(win1.fields, { name = "Field 2", value = nil, input = false, output = true })
-  table.insert(win2.fields, { name = "Field 1", value = nil, input = true, output = true })
-  table.insert(win2.fields, { name = "Field 2", value = nil, input = false, output = true })
-  ]]
-
-  local win3 = Window(200, 300)
+  local win3 = Window(400, 300)
   Field(win3, "Coso", true, true)
   Field(win3, "Mohoso", false, true)
   Field(win3, "Para todos")
   
   local win4 = Window(100, 100)
-  Field(win4, "Test", true)
+  Field(win4, "Test", true, true)
 end
 
 function love.draw()
@@ -48,7 +38,7 @@ function love.draw()
 		local p3 = {x = v.window2.x+offset2, y = v.window2:getFieldY(v.window2_field)}
 		local p1, p2 = {x = p0.x+75, y = p0.y}, {x = p3.x-75, y = p3.y}
 		local curve = {}
-		for t = 0, 1, 0.1 do
+		for t = 0, 1, 0.05 do
 			local x = ((1-t)^3)*p0.x + 3*((1-t)^2)*t*p1.x + 3*(1-t)*(t^2)*p2.x + (t^3)*p3.x
 			local y = ((1-t)^3)*p0.y + 3*((1-t)^2)*t*p1.y + 3*(1-t)*(t^2)*p2.y + (t^3)*p3.y
 			table.insert(curve, x)
