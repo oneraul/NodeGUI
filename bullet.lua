@@ -4,10 +4,10 @@ local Bullet = class("Bullet", {
 
 Bullet.radius = 6
 
-function Bullet:init(field, output)
+function Bullet:init(field, isOutput)
 	self.field = field
-	self.output = output
-	if output then self.x = field.window.width end
+	self.isOutput = isOutput
+	if isOutput then self.x = field.window.width end
 	self.y = field.height/2
 end
 
@@ -22,9 +22,11 @@ function Bullet:mouse(x, y, action)
 			newLine = {origin = self, x = love.mouse.getX(), y = love.mouse.getY()}
 			dragging = newLine
 		elseif action == "released" then
-			local output, input
-			if self.output then output, input = self, newLine.origin else output, input = newLine.origin, self end
-			Connection:new(output, input)
+			if newLine ~= nil and newLine.origin.isOutput ~= self.isOutput then
+				local output, input
+				if self.isOutput then output, input = self, newLine.origin else output, input = newLine.origin, self end
+				Connection:new(output, input)
+			end
 		end
 		return true
 	else return false end
