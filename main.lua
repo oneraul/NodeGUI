@@ -30,7 +30,7 @@ function love.draw()
 	for k, window in ipairs(windows) do window:draw() end
 	
 	if newLine ~= nil then
-		love.graphics.line(newLine.origin.field.window.x+newLine.origin.x, newLine.origin.field.window.y+newLine.origin.field.y+newLine.origin.y, newLine.x, newLine.y)
+		love.graphics.line(newLine.origin:getX(), newLine.origin:getY(), newLine.x, newLine.y)
 	end
 
 	for k, v in ipairs(connections) do 

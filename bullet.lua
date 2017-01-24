@@ -13,15 +13,18 @@ end
 
 function Bullet:draw()
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.circle("line", self.field.window.x+self.x, self.field.window.y+self.field.y+self.y, Bullet.radius)
+	love.graphics.circle("line", self:getX(), self:getY(), Bullet.radius)
 end
 
 function Bullet:clicked(x, y)
-	if dst2(x, y, self.field.window.x+self.x, self.field.window.y+self.field.y+self.y) < Bullet.radius^2 then
+	if dst2(x, y, self:getX(), self:getY()) < Bullet.radius^2 then
 		newLine = {origin = self, x = love.mouse.getX(), y = love.mouse.getY()}
 		dragging = newLine
 		return true
 	else return false end
 end
+
+function Bullet:getX() return self.field.window.x + self.x end
+function Bullet:getY() return self.field.window.y + self.field.y + self.y end
 
 return Bullet
