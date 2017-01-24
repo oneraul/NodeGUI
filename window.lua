@@ -24,7 +24,7 @@ function Window:draw()
 end
 
 function Window:clicked(x, y)
-	if x > self.x and x < self.x+self.width
+	if x > self.x-Bullet.radius and x < self.x+self.width+Bullet.radius
 	and y > self.y and y < self.y+self.height then
 		if y < self.y+self.titleHeight then
 			dragging = self
