@@ -6,9 +6,10 @@ local Window = class("Window", {
 	fields = {}
 })
 
-function Window:init(x, y, width, height)
+function Window:init(x, y, width, height, title)
 	self.x, self.y = x, y
 	self.width, self.height = width, height
+	self.title = title
 	table.insert(windows, self)
 end
 
