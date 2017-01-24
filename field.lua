@@ -28,11 +28,11 @@ function Field:draw()
 	if self.output ~= nil then self.output:draw() end
 end
 
-function Field:clicked(x, y)
+function Field:mouse(x, y, action)
 	--TODO return true
 
-	if self.input ~= nil then self.input:clicked(x, y) end
-	if self.output ~= nil then self.output:clicked(x, y) end
+	if self.input ~= nil then self.input:mouse(x, y, action) end
+	if self.output ~= nil then self.output:mouse(x, y, action) end
 
 	return false
 end

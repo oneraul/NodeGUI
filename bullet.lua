@@ -16,10 +16,16 @@ function Bullet:draw()
 	love.graphics.circle("line", self:getX(), self:getY(), Bullet.radius)
 end
 
-function Bullet:clicked(x, y)
+function Bullet:mouse(x, y, action)
 	if dst2(x, y, self:getX(), self:getY()) < Bullet.radius^2 then
-		newLine = {origin = self, x = love.mouse.getX(), y = love.mouse.getY()}
-		dragging = newLine
+		if action == "clicked" then
+			newLine = {origin = self, x = love.mouse.getX(), y = love.mouse.getY()}
+			dragging = newLine
+		elseif action == "released" then
+			local output, input
+			if self.output then output, input = self, newLine.origin else output, input = newLine.origin, self end
+			Connection:new(output, input)
+		end
 		return true
 	else return false end
 end

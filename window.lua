@@ -23,14 +23,14 @@ function Window:draw()
 	for k, v in ipairs(self.fields) do v:draw() end
 end
 
-function Window:clicked(x, y)
+function Window:mouse(x, y, action)
 	if x > self.x-Bullet.radius and x < self.x+self.width+Bullet.radius
 	and y > self.y and y < self.y+self.height then
 		if y < self.y+self.titleHeight then
-			dragging = self
+			if action == "clicked" then dragging = self end
 		else
 			for k, v in ipairs(self.fields) do
-				if v:clicked(x, y) then break end
+				if v:mouse(x, y, action) then break end
 			end
 		end
 		return true
