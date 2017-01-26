@@ -19,7 +19,7 @@ end
 function Bullet:mouse(x, y, action)
 	if dst2(x, y, self:getX(), self:getY()) < Bullet.radius^2 then
 		if action == "clicked" then
-			G_newLine = {origin = self, x = love.mouse.getX(), y = love.mouse.getY()}
+			G_newLine = {origin = self, x = (love.mouse.getX()-G_cam.x)/G_cam.zoom, y = (love.mouse.getY()-G_cam.y)/G_cam.zoom}
 			G_dragging = G_newLine
 		elseif action == "released" then
 			if G_newLine ~= nil and G_newLine.origin.isOutput ~= self.isOutput then

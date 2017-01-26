@@ -12,6 +12,7 @@ function love.load()
 	G_textinput = nil
 	G_connections = {}
 	G_windows = {}
+	G_cam = {x = 0, y = 0, zoom = 1}
 
 	utf8 = require 'utf8'
 	class = require '30log'
@@ -21,6 +22,8 @@ function love.load()
 	Connection = require 'connection'
 	Field = require 'field'
 	Window = require 'window'
+	
+	---------------------------------------
 
 	local win3 = Window(400, 300, 200, 200)
 	Field(win3, "Coso", nil, true, true)
@@ -35,6 +38,11 @@ function love.load()
 end
 
 function love.draw()
+	-- set cam
+	love.graphics.origin()
+	love.graphics.translate(G_cam.x, G_cam.y)
+	love.graphics.scale(G_cam.zoom)
+
 	for k, window in ipairs(G_windows) do window:draw() end
 	for k, connection in ipairs(G_connections) do connection:draw() end
 	
@@ -44,22 +52,32 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch)
+	x, y = (x-G_cam.x)/G_cam.zoom, (y-G_cam.y)/G_cam.zoom
+
 	G_textinput = nil
 	love.keyboard.setTextInput(false)
 
-	for k, window in ipairs(G_windows) do
-		if window:mouse(x, y, "clicked") then break end
+	if love.keyboard.isDown("space") then
+		G_dragging = G_cam
+	else
+		for k, window in ipairs(G_windows) do
+			if window:mouse(x, y, "clicked") then break end
+		end
 	end
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
+	dx, dy = dx/G_cam.zoom, dy/G_cam.zoom
+
 	if G_dragging ~= nil then
 		G_dragging.x = G_dragging.x + dx
 		G_dragging.y = G_dragging.y + dy
 	end
 end
 
-function love.mousereleased(x, y, button, istouch)	
+function love.mousereleased(x, y, button, istouch)
+	x, y = (x-G_cam.x)/G_cam.zoom, (y-G_cam.y)/G_cam.zoom
+
 	for k, window in ipairs(G_windows) do
 		if window:mouse(x, y, "released") then break end
 	end
@@ -68,9 +86,7 @@ function love.mousereleased(x, y, button, istouch)
 end
 
 function love.textinput(t)
-	if G_textinput ~= nil then
-    G_textinput.text = G_textinput.text .. t
-	end
+	if G_textinput ~= nil then G_textinput.text = G_textinput.text .. t end
 end
 
 function love.keypressed(key)
@@ -85,4 +101,8 @@ function love.keypressed(key)
 			end
 		end
 	end
+end
+
+function love.wheelmoved(dx, dy)
+	G_cam.zoom = G_cam.zoom + dy * 0.01
 end
