@@ -3,12 +3,14 @@ local Textfield = class("Textfield", {
 	text = "",
 })
 
+local fontHeight = love.graphics.getFont():getHeight()
+
 function Textfield:draw()
 	love.graphics.setColor(35, 35, 35)
 	love.graphics.rectangle("fill", self:getX(), self:getY(), self.width, self.height)
 	love.graphics.setColor(255, 255, 255)
 	love.graphics.rectangle("line", self:getX(), self:getY(), self.width, self.height)
-	love.graphics.printf(self.text, self:getX(), self:getY(), self.width, "left")
+	love.graphics.printf(self.text, self:getX(), self:getY()+(self.height-fontHeight)/2, self.width, "left")
 
 	-- focus border
 	if G_textinput == self then
