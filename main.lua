@@ -15,16 +15,18 @@ function love.load()
 
 	utf8 = require 'utf8'
 	class = require '30log'
+	Checkbox = require 'checkbox'
 	Textfield = require 'textfield'
 	Bullet = require 'bullet'
 	Connection = require 'connection'
 	Field = require 'field'
 	Window = require 'window'
 
-	local win3 = Window(400, 300)
+	local win3 = Window(400, 300, 200, 200)
 	Field(win3, "Coso", nil, true, true)
 	Field(win3, "Mohoso", nil, false, true)
 	Field(win3, "Para todos")
+	Field(win3, "Check", Checkbox())
 
 	local win4 = Window(100, 100)
 	Field(win4, "Test", nil, true, true)
