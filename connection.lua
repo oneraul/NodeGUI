@@ -3,7 +3,7 @@ local Connection = class("Connection")
 function Connection:init(output, input)
 	self.bullet_output = output
 	self.bullet_input = input
-	table.insert(connections, self)
+	table.insert(G_connections, self)
 end
 
 function Connection:draw()
@@ -22,6 +22,7 @@ function Connection:draw()
 		table.insert(curve, y)
 	end
 	
+	love.graphics.setColor(255, 255, 255)
 	love.graphics.line(curve)
 end
 

@@ -7,11 +7,11 @@ function love.load()
 	love.keyboard.setKeyRepeat(true)
 	love.graphics.setBackgroundColor(25, 50, 75)
 
-	dragging = nil
-	newLine = nil
-	textinput = nil
-	connections = {}
-	windows = {}
+	G_dragging = nil
+	G_newLine = nil
+	G_textinput = nil
+	G_connections = {}
+	G_windows = {}
 
 	utf8 = require 'utf8'
 	class = require '30log'
@@ -33,53 +33,53 @@ function love.load()
 end
 
 function love.draw()
-	for k, window in ipairs(windows) do window:draw() end
-	for k, connection in ipairs(connections) do connection:draw() end
+	for k, window in ipairs(G_windows) do window:draw() end
+	for k, connection in ipairs(G_connections) do connection:draw() end
 	
-	if newLine ~= nil then
-		love.graphics.line(newLine.origin:getX(), newLine.origin:getY(), newLine.x, newLine.y)
+	if G_newLine ~= nil then
+		love.graphics.line(G_newLine.origin:getX(), G_newLine.origin:getY(), G_newLine.x, G_newLine.y)
 	end
 end
 
 function love.mousepressed(x, y, button, istouch)
-	textinput = nil
+	G_textinput = nil
 	love.keyboard.setTextInput(false)
 
-	for k, window in ipairs(windows) do
+	for k, window in ipairs(G_windows) do
 		if window:mouse(x, y, "clicked") then break end
 	end
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
-	if dragging ~= nil then
-		dragging.x = dragging.x + dx
-		dragging.y = dragging.y + dy
+	if G_dragging ~= nil then
+		G_dragging.x = G_dragging.x + dx
+		G_dragging.y = G_dragging.y + dy
 	end
 end
 
 function love.mousereleased(x, y, button, istouch)	
-	for k, window in ipairs(windows) do
+	for k, window in ipairs(G_windows) do
 		if window:mouse(x, y, "released") then break end
 	end
 	
-	dragging, newLine = nil, nil
+	G_dragging, G_newLine = nil, nil
 end
 
 function love.textinput(t)
-	if textinput ~= nil then
-    textinput.text = textinput.text .. t
+	if G_textinput ~= nil then
+    G_textinput.text = G_textinput.text .. t
 	end
 end
 
 function love.keypressed(key)
  if key == "backspace" then
-		if textinput ~= nil then
+		if G_textinput ~= nil then
 			-- get the byte offset to the last UTF-8 character in the string.
-			local byteoffset = utf8.offset(textinput.text, -1)
+			local byteoffset = utf8.offset(G_textinput.text, -1)
 			if byteoffset then
 				-- remove the last UTF-8 character.
 				-- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
-				textinput.text = string.sub(textinput.text, 1, byteoffset - 1)
+				G_textinput.text = string.sub(G_textinput.text, 1, byteoffset - 1)
 			end
 		end
 	end

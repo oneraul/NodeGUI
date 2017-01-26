@@ -11,7 +11,7 @@ function Textfield:draw()
 	love.graphics.printf(self.text, self:getX(), self:getY(), self.width, "left")
 
 	-- focus border
-	if textinput == self then
+	if G_textinput == self then
 		love.graphics.setColor(200, 35, 35)
 		love.graphics.rectangle("line", self:getX(), self:getY(), self.width, self.height)
 	end
@@ -21,7 +21,7 @@ function Textfield:mouse(x, y, action)
 	if action == "released" then
 		if x > self:getX() and x < self:getX()+self.width
 		and y > self:getY() and y < self:getY()+self.height then
-			textinput = self
+			G_textinput = self
 			love.keyboard.setTextInput(true)
 			return true
 		else return false end

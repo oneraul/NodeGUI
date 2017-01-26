@@ -19,12 +19,12 @@ end
 function Bullet:mouse(x, y, action)
 	if dst2(x, y, self:getX(), self:getY()) < Bullet.radius^2 then
 		if action == "clicked" then
-			newLine = {origin = self, x = love.mouse.getX(), y = love.mouse.getY()}
-			dragging = newLine
+			G_newLine = {origin = self, x = love.mouse.getX(), y = love.mouse.getY()}
+			G_dragging = G_newLine
 		elseif action == "released" then
-			if newLine ~= nil and newLine.origin.isOutput ~= self.isOutput then
+			if G_newLine ~= nil and G_newLine.origin.isOutput ~= self.isOutput then
 				local output, input
-				if self.isOutput then output, input = self, newLine.origin else output, input = newLine.origin, self end
+				if self.isOutput then output, input = self, G_newLine.origin else output, input = G_newLine.origin, self end
 				Connection:new(output, input)
 			end
 		end

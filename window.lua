@@ -10,7 +10,7 @@ function Window:init(x, y, width, height, title)
 	self.x, self.y = x, y
 	self.width, self.height = width, height
 	self.title = title
-	table.insert(windows, self)
+	table.insert(G_windows, self)
 end
 
 function Window:draw()
@@ -21,17 +21,17 @@ function Window:draw()
 	love.graphics.printf(self.title, self.x, self.y, self.width, "center")
 	love.graphics.line(self.x, self.y+self.titleHeight, self.x+self.width, self.y+self.titleHeight)
 	
-	for k, v in ipairs(self.fields) do v:draw() end
+	for k, field in ipairs(self.fields) do field:draw() end
 end
 
 function Window:mouse(x, y, action)
 	if x > self.x-Bullet.radius and x < self.x+self.width+Bullet.radius
 	and y > self.y and y < self.y+self.height then
 		if y < self.y+self.titleHeight then
-			if action == "clicked" then dragging = self end
+			if action == "clicked" then G_dragging = self end
 		else
-			for k, v in ipairs(self.fields) do
-				if v:mouse(x, y, action) then break end
+			for k, field in ipairs(self.fields) do
+				if field:mouse(x, y, action) then break end
 			end
 		end
 		return true
