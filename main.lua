@@ -4,13 +4,16 @@ function dst2(x1, y1, x2, y2)
 end
 
 function love.load()
+	love.keyboard.setKeyRepeat(true)
 	love.graphics.setBackgroundColor(25, 50, 75)
 
 	dragging = nil
 	newLine = nil
+	textinput = nil
 	connections = {}
 	windows = {}
 
+	utf8 = require 'utf8'
 	class = require '30log'
 	Textfield = require 'textfield'
 	Bullet = require 'bullet'
@@ -19,12 +22,14 @@ function love.load()
 	Window = require 'window'
 
 	local win3 = Window(400, 300)
-	Field(win3, "Coso", true, true)
-	Field(win3, "Mohoso", false, true)
+	Field(win3, "Coso", nil, true, true)
+	Field(win3, "Mohoso", nil, false, true)
 	Field(win3, "Para todos")
 
 	local win4 = Window(100, 100)
-	Field(win4, "Test", true, true)
+	Field(win4, "Test", nil, true, true)
+	Field(win4, "Text", Textfield(), false, false)
+	
 end
 
 function love.draw()
@@ -34,11 +39,12 @@ function love.draw()
 	if newLine ~= nil then
 		love.graphics.line(newLine.origin:getX(), newLine.origin:getY(), newLine.x, newLine.y)
 	end
-	
-	love.graphics.print(text, 10, 10)
 end
 
 function love.mousepressed(x, y, button, istouch)
+	textinput = nil
+	love.keyboard.setTextInput(false)
+
 	for k, window in ipairs(windows) do
 		if window:mouse(x, y, "clicked") then break end
 	end
@@ -59,7 +65,22 @@ function love.mousereleased(x, y, button, istouch)
 	dragging, newLine = nil, nil
 end
 
-text = ""
 function love.textinput(t)
-    text = text .. t
+	if textinput ~= nil then
+    textinput.text = textinput.text .. t
+	end
+end
+
+function love.keypressed(key)
+ if key == "backspace" then
+		if textinput ~= nil then
+			-- get the byte offset to the last UTF-8 character in the string.
+			local byteoffset = utf8.offset(textinput.text, -1)
+			if byteoffset then
+				-- remove the last UTF-8 character.
+				-- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
+				textinput.text = string.sub(textinput.text, 1, byteoffset - 1)
+			end
+		end
+	end
 end
