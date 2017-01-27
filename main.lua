@@ -3,15 +3,21 @@ function dst2(x1, y1, x2, y2)
 	return x*x + y*y
 end
 
+function removeValueFromTable(_table, value)
+	for i = 1, #_table do
+		if _table[i] == value then table.remove(_table, i) break end
+	end
+end
+
 function love.load()
 	love.keyboard.setKeyRepeat(true)
 	love.graphics.setBackgroundColor(25, 50, 75)
 
 	G_dragging = nil
+	G_selected = nil
 	G_newLine = nil
 	G_textinput = nil
-	G_connections = {}
-	G_windows = {}
+	G_elements = {}
 	G_cam = {x = 0, y = 0, zoom = 1}
 
 	utf8 = require 'utf8'
@@ -43,8 +49,7 @@ function love.draw()
 	love.graphics.translate(G_cam.x, G_cam.y)
 	love.graphics.scale(G_cam.zoom)
 
-	for k, window in ipairs(G_windows) do window:draw() end
-	for k, connection in ipairs(G_connections) do connection:draw() end
+	for k, element in ipairs(G_elements) do element:draw() end
 	
 	if G_newLine ~= nil then
 		love.graphics.line(G_newLine.origin:getX(), G_newLine.origin:getY(), G_newLine.x, G_newLine.y)
@@ -54,14 +59,14 @@ end
 function love.mousepressed(x, y, button, istouch)
 	x, y = (x-G_cam.x)/G_cam.zoom, (y-G_cam.y)/G_cam.zoom
 
-	G_textinput = nil
+	G_selected, G_textinput = nil, nil
 	love.keyboard.setTextInput(false)
 
 	if love.keyboard.isDown("space") then
 		G_dragging = G_cam
 	else
-		for k, window in ipairs(G_windows) do
-			if window:mouse(x, y, "clicked") then break end
+		for k, element in ipairs(G_elements) do
+			if element:mouse(x, y, "clicked") then break end
 		end
 	end
 end
@@ -78,8 +83,8 @@ end
 function love.mousereleased(x, y, button, istouch)
 	x, y = (x-G_cam.x)/G_cam.zoom, (y-G_cam.y)/G_cam.zoom
 
-	for k, window in ipairs(G_windows) do
-		if window:mouse(x, y, "released") then break end
+	for k, element in ipairs(G_elements) do
+		if element:mouse(x, y, "released") then break end
 	end
 	
 	G_dragging, G_newLine = nil, nil
@@ -99,6 +104,10 @@ function love.keypressed(key)
 				-- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
 				G_textinput.text = string.sub(G_textinput.text, 1, byteoffset - 1)
 			end
+		end
+	elseif key == "delete" then
+		if G_selected ~= nil then
+			removeValueFromTable(G_elements, G_selected)
 		end
 	end
 end

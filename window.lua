@@ -10,7 +10,7 @@ function Window:init(x, y, width, height, title)
 	self.x, self.y = x, y
 	self.width, self.height = width, height
 	self.title = title
-	table.insert(G_windows, self)
+	table.insert(G_elements, self)
 end
 
 function Window:draw()
