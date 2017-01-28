@@ -50,8 +50,8 @@ function Connection:mouse(x, y, action)
 end
 
 function Connection:remove()
-	removeValueFromTable(self.output_bullet.connections, self)
-	removeValueFromTable(self.input_bullet.connections, self)
+	removeValueFromTable(self.bullet_output.connections, self)
+	removeValueFromTable(self.bullet_input.connections, self)
 end
 
 return Connection

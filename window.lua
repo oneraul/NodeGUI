@@ -49,11 +49,13 @@ function Window:remove()
 		if field.input ~= nil then 
 			for j, connection in ipairs(field.input.connections) do
 				removeValueFromTable(G_elements, connection)
+				removeValueFromTable(connection.bullet_output.connections, connection)
 			end
 		end
 		if field.output ~= nil then 
 			for j, connection in ipairs(field.output.connections) do
 				removeValueFromTable(G_elements, connection)
+				removeValueFromTable(connection.bullet_input.connections, connection)
 			end
 		end
 	end
