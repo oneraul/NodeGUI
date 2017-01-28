@@ -107,6 +107,7 @@ function love.keypressed(key)
 		end
 	elseif key == "delete" then
 		if G_selected ~= nil then
+			G_selected:remove()
 			removeValueFromTable(G_elements, G_selected)
 		end
 	end

@@ -3,6 +3,8 @@ local Connection = class("Connection")
 function Connection:init(output, input)
 	self.bullet_output = output
 	self.bullet_input = input
+	table.insert(output.connections, self)
+	table.insert(input.connections, self)
 	table.insert(G_elements, self)
 end
 
@@ -45,6 +47,11 @@ function Connection:mouse(x, y, action)
 			return true
 		else return false end
 	else return false end
+end
+
+function Connection:remove()
+	removeValueFromTable(self.output_bullet.connections, self)
+	removeValueFromTable(self.input_bullet.connections, self)
 end
 
 return Connection

@@ -1,5 +1,6 @@
 local Bullet = class("Bullet", {
-	x = 0, y = 0
+	x = 0, y = 0,
+	connections = {}
 })
 
 Bullet.radius = 6
